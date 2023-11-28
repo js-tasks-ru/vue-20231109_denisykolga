@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <title>CounterButtonApp</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <div id="app">
-      <button type="button">0</button>
+        <button type="button" @click="addCounter">{{counter}}</button>
     </div>
 
     <script type="module" src="./script.js"></script>
-  </body>
+</body>
+
 </html>
