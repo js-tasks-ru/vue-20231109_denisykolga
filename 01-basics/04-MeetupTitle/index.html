@@ -9,7 +9,7 @@
 <body>
     <div id="app">
         <div>
-            <label v-for="item in meetups"><input type="radio" name="meetupId" :value="item" v-model="itemValue" />{{item}}</label>
+            <label v-for="item in meetups"><input type="radio" :name="'meetupId' + item" :value="item" v-model="itemValue" />{{item}}</label>
             <hr />
             <h3>{{itemName}}</h3>
         </div>
