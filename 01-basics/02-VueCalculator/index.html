@@ -10,17 +10,17 @@
             font-family: emoji;
             src: local('Apple Color Emoji'), local('Android Emoji'), local('Segoe UI Emoji'), local(EmojiSymbols), local(Symbola);
         }
-        
+
         .row {
             display: flex;
             flex-direction: row;
             align-items: center;
         }
-        
+
         .col {
             padding: 0.5rem;
         }
-        
+
         input[type='number'] {
             width: 48px;
         }
@@ -31,23 +31,23 @@
     <div id="app" class="container">
         <div class="row">
             <div class="col">
-                <input type="number" v-model.number="value1" @change="changeResult" />
+                <input type="number" v-model="value1" />
             </div>
 
             <div class="col" style="display: flex; flex-direction: column; font-family: emoji">
-                <label><input type="radio" name="operator" value="sum" @change="sum" /> ➕</label>
-                <label><input type="radio" name="operator" value="subtract" @change="subtract" /> ➖</label>
-                <label><input type="radio" name="operator" value="multiply" @change="multiply" /> ✖</label>
-                <label><input type="radio" name="operator" value="divide" @change="divide" /> ➗</label>
+                <label><input type="radio" name="operator" value="sum" v-model="sign" /> ➕</label>
+                <label><input type="radio" name="operator" value="subtract" v-model="sign" /> ➖</label>
+                <label><input type="radio" name="operator" value="multiply" v-model="sign" /> ✖</label>
+                <label><input type="radio" name="operator" value="divide" v-model="sign" /> ➗</label>
             </div>
 
             <div class="col">
-                <input type="number" v-model.number="value2" @change="changeResult" />
+                <input type="number" v-model="value2" />
             </div>
 
             <div class="col">=</div>
 
-            <output class="col">{{result}}</output>
+            <output class="col">{{calc }}</output>
         </div>
     </div>
 
