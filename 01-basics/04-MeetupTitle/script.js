@@ -21,7 +21,6 @@ const App = defineComponent({
 
     data() {
         return {
-            meetups: [1, 2, 3, 4, 5],
             itemValue: null,
             itemName: null,
         };
