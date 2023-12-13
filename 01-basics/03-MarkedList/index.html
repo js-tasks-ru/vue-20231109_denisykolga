@@ -18,8 +18,8 @@
             <div class="form-group">
                 <input type="search" v-model="currentValue" @input="filterEmails" />
             </div>
-            <ul v-if="filterEmails">
-                <li v-for="item in emails" v-bind:class="`${filterEmails.includes(item.toLowerCase()) ? 'marked' : ''}`">{{item}}</li>
+            <ul>
+                <li v-for="item in emailsWithFlag" :class="item.marked === true? 'marked':''">{{item.name}}</li>
             </ul>
         </div>
     </div>

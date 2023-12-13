@@ -37,14 +37,35 @@ const App = defineComponent({
     data() {
         return {
             emails: emails,
-            currentValue: null,
+            currentValue: '',
+            emailsWithFlag: [],
+            flag: true,
         };
     },
-
+    beforeMount: function() {
+        this.emailsWithFlag = this.emails.map((item) => {
+            return { name: item, marked: false };
+        });
+    },
     computed: {
         filterEmails() {
-            let arr = this.emails.map(item => item.toLowerCase());
-            return arr.filter(item => (item.includes(this.currentValue) && this.currentValue != ''));
+            let arr = 0;
+            if (this.currentValue.length > 0 && this.flag === false) {
+                return false;
+            } else {
+                this.emailsWithFlag.map(item => {
+                    if (item.name.toLowerCase().includes(this.currentValue) && this.currentValue != '') {
+                        item.marked = true;
+                        this.flag = true;
+                    } else {
+                        item.marked = false;
+                    };
+                });
+
+                arr = this.emailsWithFlag.filter(item => item.marked === true).length;
+                this.flag = (arr !== 0 && arr !== this.emailsWithFlag.lenght) || (this.currentValue === "");
+            }
+            return true;
         }
     },
 });
