@@ -19,7 +19,7 @@
                 <input type="search" v-model="currentValue" @input="filterEmails" />
             </div>
             <ul>
-                <li v-for="item in emailsWithFlag" :class="item.marked === true? 'marked':''">{{item.name}}</li>
+                <li v-for="item in emailsWithFlag" :class="item.marked === true? 'marked':''">{{ item.name }}</li>
             </ul>
         </div>
     </div>
