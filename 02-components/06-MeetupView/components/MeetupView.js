@@ -6,10 +6,11 @@ import MeetupCover from './MeetupCover.js';
 import MeetupInfo from './MeetupInfo.js';
 import MeetupAgendaItem from './MeetupAgendaItem.js';
 import MeetupAgenda from './MeetupAgenda.js';
-import meetups from '../api/meetups.js';
+//import meetups from '../api/meetups.js';
 
 export default defineComponent({
     name: 'MeetupView',
+    //meetups,
 
     components: {
         UiAlert,
@@ -21,53 +22,34 @@ export default defineComponent({
         MeetupAgenda
     },
 
-    data() {
-        return {
-            meetups,
-            selectedMeetup: 0,
-        };
-    },
-
     props: {
         meetup: {
             type: Object,
             required: true,
         },
     },
-    computed: {
-        description() {
-            return this.meetups[this.selectedMeetup].description;
-        },
-    },
 
     template: `
     <div>
       <!-- meetup cover-->
-      <MeetupCover :title="meetups[selectedMeetup].title" :image="meetups[selectedMeetup].image" />
+      <MeetupCover :title="meetup.title" :image="meetup.image" />
       <UiContainer>
         <div class="meetup">
           <div class="meetup__content">
-            <p>
-            <select v-model="selectedMeetup">
-            <option v-for="(meetup, index) in meetups" :key="meetup.id" :value="index">
-              {{ index }}: {{ meetup.title }}
-            </option>
-            </select>
-          </p>
             <h3>Описание</h3>
             <!-- meetup description -->
-            <MeetupDescription :description="description" />
+            <MeetupDescription :description="meetup.description" />
             <h3>Программа</h3>
             <!-- meetup agenda -->
-            <MeetupAgenda :agenda="meetups[selectedMeetup].agenda" />
-            <UiAlert v-if="meetups[selectedMeetup].agenda.length===0">Программа пока пуста...</UiAlert>
+            <MeetupAgenda :agenda="meetup.agenda" />
+            <UiAlert v-if="meetup.agenda.length===0">Программа пока пуста...</UiAlert>
           </div>
           <div class="meetup__aside">
             <!-- meetup info -->
             <MeetupInfo
-        :organizer="meetups[selectedMeetup].organizer"
-        :place="meetups[selectedMeetup].place"
-        :date="meetups[selectedMeetup].date"
+        :organizer="meetup.organizer"
+        :place="meetup.place"
+        :date="meetup.date"
       />
           </div>
         </div>
