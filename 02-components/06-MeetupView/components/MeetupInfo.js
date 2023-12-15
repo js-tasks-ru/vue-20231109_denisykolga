@@ -2,30 +2,35 @@ import { defineComponent } from '../vendor/vue.esm-browser.js';
 
 export default defineComponent({
     name: 'MeetupInfo',
+
     props: {
         organizer: {
             type: String,
             required: true,
         },
+
         place: {
             type: String,
             required: true,
         },
+
         date: {
             type: Number,
             required: true,
         },
     },
+
     computed: {
-        formatAsLocalDate() {
+        isoDate() {
+            return new Date(this.date).toISOString().split('T')[0];
+        },
+
+        localDate() {
             return new Date(this.date).toLocaleString(navigator.language, {
                 year: 'numeric',
                 month: 'long',
-                day: 'numeric'
+                day: 'numeric',
             });
-        },
-        formatAsIsoDate() {
-            return new Date(this.date).toISOString().substring(0, 10);
         },
     },
 
@@ -33,15 +38,15 @@ export default defineComponent({
     <ul class="meetup-info">
       <li>
         <img class="icon meetup-info__icon" alt="icon" src="/assets/icons/icon-user.svg" />
-        {{organizer}}
+        {{ organizer }}
       </li>
       <li>
         <img class="icon meetup-info__icon" alt="icon" src="/assets/icons/icon-map.svg" />
-        {{place}}
+        {{ place }}
       </li>
       <li>
         <img class="icon meetup-info__icon" alt="icon" src="/assets/icons/icon-cal-lg.svg" />
-        <time :datetime="formatAsIsoDate">{{formatAsLocalDate}}</time>
+        <time :datetime="isoDate">{{ localDate }}</time>
       </li>
     </ul>`,
 });
