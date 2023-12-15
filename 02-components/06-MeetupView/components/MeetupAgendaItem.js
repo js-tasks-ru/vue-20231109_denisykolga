@@ -1,9 +1,11 @@
 import { defineComponent } from '../vendor/vue.esm-browser.js';
 import { agendaItemIcons, agendaItemDefaultTitles } from '../meetupService.js';
 
+
 export default defineComponent({
     name: 'MeetupAgendaItem',
-
+    agendaItemIcons,
+    agendaItemDefaultTitles,
     props: {
         agendaItem: {
             type: Object,
@@ -11,29 +13,15 @@ export default defineComponent({
         },
     },
 
-    computed: {
-        title() {
-            return this.agendaItem.title ? ? agendaItemDefaultTitles[this.agendaItem.type];
-        },
-
-        icon() {
-            return agendaItemIcons[this.agendaItem.type];
-        },
-
-        iconSrc() {
-            return `/assets/icons/icon-${this.icon}.svg`;
-        },
-    },
-
     template: `
     <div class="agenda-item">
       <div class="agenda-item__col">
-        <img :src="iconSrc" class="icon" :alt="icon" />
+        <img :src="'/assets/icons/icon-'+$options.agendaItemIcons[agendaItem.type]+'.svg'" class="icon" :alt="$options.agendaItemIcons[agendaItem.type]" />
       </div>
-      <div class="agenda-item__col">{{ agendaItem.startsAt }} - {{ agendaItem.endsAt }}</div>
+      <div class="agenda-item__col">{{ agendaItem.startsAt + ' - ' + agendaItem.endsAt }}</div>
       <div class="agenda-item__col">
-        <h3 class="agenda-item__title">{{ title }}</h3>
-        <p v-if="agendaItem.speaker" class="agenda-item__talk">
+        <h3 class="agenda-item__title">{{ agendaItem.title || $options.agendaItemDefaultTitles[agendaItem.type] }}</h3>
+        <p class="agenda-item__talk" v-if="agendaItem.speaker">
           <span>{{ agendaItem.speaker }}</span>
           <span class="agenda-item__dot"></span>
           <span class="agenda-item__lang">{{ agendaItem.language }}</span>
