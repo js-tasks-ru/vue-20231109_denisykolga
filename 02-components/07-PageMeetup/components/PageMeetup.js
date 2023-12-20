@@ -1,11 +1,6 @@
 import { defineComponent } from '../vendor/vue.esm-browser.js';
 import UiContainer from './UiContainer.js';
 import UiAlert from './UiAlert.js';
-import MeetupDescription from './MeetupDescription.js';
-import MeetupCover from './MeetupCover.js';
-import MeetupInfo from './MeetupInfo.js';
-import MeetupAgendaItem from './MeetupAgendaItem.js';
-import MeetupAgenda from './MeetupAgenda.js';
 import MeetupView from './MeetupView.js';
 import { fetchMeetupById } from '../meetupService.js';
 
@@ -15,11 +10,6 @@ export default defineComponent({
     components: {
         UiAlert,
         UiContainer,
-        MeetupDescription,
-        MeetupCover,
-        MeetupInfo,
-        MeetupAgendaItem,
-        MeetupAgenda,
         MeetupView,
     },
 
@@ -34,27 +24,31 @@ export default defineComponent({
         return {
             meetup: null,
             refreshMeetup: null,
-            errorMeetup: null,
+            error: null,
         }
     },
 
-    async mounted() {
-        let meetup = await fetchMeetupById(this.meetupId);
-        this.meetup = meetup;
+    mounted() {
+        this.fetchMeetup();
     },
 
     watch: {
-        async meetupId(newValue, oldValue) {
+        meetupId() {
+            this.fetchMeetup();
+        },
+    },
+
+    methods: {
+        async fetchMeetup() {
             this.meetup = null;
             this.refreshMeetup = null;
             try {
-                let meetup = await fetchMeetupById(newValue);
-                this.meetup = meetup;
-            } catch (err) {
+                this.meetup = await fetchMeetupById(this.meetupId);
+            } catch (error) {
                 this.refreshMeetup = 1;
-                this.errorMeetup = err.message;
+                this.error = error.message;
             }
-        }
+        },
     },
 
     template: `
@@ -65,7 +59,7 @@ export default defineComponent({
           <UiAlert>Загрузка...</UiAlert>
         </UiContainer>
         <UiContainer v-if="!meetup && refreshMeetup">
-        <UiAlert>{{ errorMeetup }}</UiAlert>
+        <UiAlert>{{ error }}</UiAlert>
         </UiContainer>
     </div>`,
 });
