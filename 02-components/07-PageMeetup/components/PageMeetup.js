@@ -33,6 +33,8 @@ export default defineComponent({
     data() {
         return {
             meetup: null,
+            refreshMeetup: null,
+            errorMeetup: null,
         }
     },
 
@@ -43,8 +45,15 @@ export default defineComponent({
 
     watch: {
         async meetupId(newValue, oldValue) {
-            let meetup = await fetchMeetupById(newValue);
-            this.meetup = meetup;
+            this.meetup = null;
+            this.refreshMeetup = null;
+            try {
+                let meetup = await fetchMeetupById(newValue);
+                this.meetup = meetup;
+            } catch (err) {
+                this.refreshMeetup = 1;
+                this.errorMeetup = err.message;
+            }
         }
     },
 
@@ -52,11 +61,11 @@ export default defineComponent({
     <div class="page-meetup">
         <!-- meetup view -->
         <MeetupView v-if="meetup" :meetup="meetup" />
-        <UiContainer v-else>
+        <UiContainer v-if="!meetup && !refreshMeetup">
           <UiAlert>Загрузка...</UiAlert>
         </UiContainer>
-        <UiContainer v-if="!meetupId">
-          <UiAlert>error</UiAlert>
+        <UiContainer v-if="!meetup && refreshMeetup">
+        <UiAlert>{{ errorMeetup }}</UiAlert>
         </UiContainer>
     </div>`,
 });
