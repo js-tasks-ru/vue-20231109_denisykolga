@@ -6,7 +6,6 @@ export default defineComponent({
 
     props: {
         agenda: Array,
-        //required: true,
     },
 
     components: {
