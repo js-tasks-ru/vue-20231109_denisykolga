@@ -1,18 +1,13 @@
 <template>
-  <div class="dropdown dropdown_opened">
-    <button type="button" class="dropdown__toggle dropdown__toggle_icon">
-      <UiIcon icon="tv" class="dropdown__icon" />
-      <span>Title</span>
+  <div class="dropdown" :class="dropdownClass">
+    <button type="button" class="dropdown__toggle dropdown__toggle_icon" @click="toggleMenu()">
+      <UiIcon :icon="dropdownTitleIcon" class="dropdown__icon" />
+      <span>{{ dropdownTitle || title }}</span>
     </button>
 
-    <div class="dropdown__menu" role="listbox">
-      <button class="dropdown__item dropdown__item_icon" role="option" type="button">
-        <UiIcon icon="tv" class="dropdown__icon" />
-        Option 1
-      </button>
-      <button class="dropdown__item dropdown__item_icon" role="option" type="button">
-        <UiIcon icon="tv" class="dropdown__icon" />
-        Option 2
+    <div class="dropdown__menu" role="listbox" v-show="dropdownState">
+      <button v-for=" dropItem in dropdownList" class="dropdown__item dropdown__item_icon" :class="{ active: 'dropdown__toggle_icon' }" role="option" type="button" @click="selectValue(dropItem)">
+        <UiOption :drop-item="dropItem" />
       </button>
     </div>
   </div>
@@ -20,15 +15,69 @@
 
 <script>
 import UiIcon from './UiIcon.vue';
+import UiOption from './UiOption.vue';
 
 export default {
   name: 'UiDropdown',
 
-  components: { UiIcon },
+  components: { UiIcon, UiOption },
+
+  data(){
+    return{
+      dropdownClass:null,
+      dropdownState:false,
+      dropdownList: [],
+      dropdownTitle: null,
+      dropdownTitleIcon: null,
+    }
+  },
+
+  props:{
+    options:{
+      type: Array,
+      required: true,
+    },
+
+    modelValue:{
+      type: String
+    },
+
+    title:{
+      type: String,
+      required: true,
+    },
+  },
+
+  mounted(){
+    this.dropdownList.push(...this.options);
+    this.dropdownTitle = this.title;
+  },
+
+  methods: {
+    toggleMenu() {
+      this.dropdownClass === "dropdown_opened" ? this.dropdownClass = '' : this.dropdownClass = "dropdown_opened";
+      this.dropdownState === true ? this.dropdownState = false : this.dropdownState = true;
+    },
+
+    selectValue(item) {
+      this.dropdownClass = "";
+      this.dropdownState = false;
+      this.dropdownTitle = item.text;
+      this.dropdownTitleIcon = item.icon;
+    },
+  },
+
+  watch: {
+    dropdownList(newValue, oldValue) {
+      this.$emit('click', {
+        selectedType: newValue,
+      })
+    }
+  },
 };
 </script>
 
-<style scoped>
+<style>
 .dropdown {
   position: relative;
   display: inline-block;

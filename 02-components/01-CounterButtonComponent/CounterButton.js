@@ -8,7 +8,6 @@ export default defineComponent({
     props: {
         count: {
             type: Number,
-            required: true,
             default: 0,
         },
     },

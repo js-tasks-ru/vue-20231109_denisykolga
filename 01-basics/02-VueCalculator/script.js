@@ -24,7 +24,7 @@ const App = defineComponent({
 
     computed: {
         calc: function() {
-            return this.sign && this.$options.operations[this.sign](this.value1, this.value2);
+            return this.sign && operations[this.sign](this.value1, this.value2);
         },
     },
 });

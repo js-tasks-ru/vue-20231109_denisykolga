@@ -38,34 +38,14 @@ const App = defineComponent({
         return {
             emails: emails,
             currentValue: '',
-            emailsWithFlag: [],
-            flag: true,
         };
     },
-    beforeMount: function() {
-        this.emailsWithFlag = this.emails.map((item) => {
-            return { name: item, marked: false };
-        });
-    },
     computed: {
-        filterEmails() {
-            let arr = 0;
-            if (this.currentValue.length > 0 && this.flag === false) {
-                return false;
-            } else {
-                this.emailsWithFlag.map(item => {
-                    if (item.name.toLowerCase().includes(this.currentValue) && this.currentValue != '') {
-                        item.marked = true;
-                        this.flag = true;
-                    } else {
-                        item.marked = false;
-                    };
-                });
-
-                arr = this.emailsWithFlag.filter(item => item.marked === true).length;
-                this.flag = (arr !== 0 && arr !== this.emailsWithFlag.lenght) || (this.currentValue === "");
-            }
-            return true;
+        markedList() {
+            return this.emails.map(name => ({
+                name,
+                marked: this.currentValue && name.toLowerCase().includes(this.currentValue),
+            }))
         }
     },
 });

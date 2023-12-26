@@ -16,10 +16,10 @@
     <div id="app" style="margin-top: 2rem">
         <div class="container">
             <div class="form-group">
-                <input type="search" v-model="currentValue" @input="filterEmails" />
+                <input type="search" v-model="currentValue" />
             </div>
             <ul>
-                <li v-for="item in emailsWithFlag" :class="item.marked === true? 'marked':''">{{ item.name }}</li>
+                <li v-for="item in markedList" :class="{ 'marked': item.marked }">{{ item.name }}</li>
             </ul>
         </div>
     </div>
