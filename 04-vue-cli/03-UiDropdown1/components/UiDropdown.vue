@@ -1,12 +1,19 @@
 <template>
   <div class="dropdown" :class="dropdownClass">
-    <button type="button" class="dropdown__toggle dropdown__toggle_icon" @click="toggleMenu()">
+    <button type="button" class="dropdown__toggle" :class="{ 'dropdown__toggle_icon': flag.length }" @click="toggleMenu()">
       <UiIcon :icon="dropdownTitleIcon" class="dropdown__icon" />
       <span>{{ dropdownTitle || title }}</span>
     </button>
 
     <div class="dropdown__menu" role="listbox" v-show="dropdownState">
-      <button v-for=" dropItem in dropdownList" class="dropdown__item dropdown__item_icon" :class="{ active: 'dropdown__toggle_icon' }" role="option" type="button" @click="selectValue(dropItem)">
+      <button
+      v-for=" dropItem in options"
+      :key="dropItem.id"
+      class="dropdown__item"
+      :class="{ 'dropdown__item_icon': flag.length }"
+      role="option"
+      type="button"
+      @click="$emit('update:modelValue', dropItem.value)">
         <UiOption :drop-item="dropItem" />
       </button>
     </div>
@@ -26,9 +33,9 @@ export default {
     return{
       dropdownClass:null,
       dropdownState:false,
-      dropdownList: [],
       dropdownTitle: null,
       dropdownTitleIcon: null,
+      flag: '',
     }
   },
 
@@ -39,7 +46,8 @@ export default {
     },
 
     modelValue:{
-      type: String
+      type: String,
+      required: true,
     },
 
     title:{
@@ -49,9 +57,11 @@ export default {
   },
 
   mounted(){
-    this.dropdownList.push(...this.options);
     this.dropdownTitle = this.title;
+    this.flag = this.options.filter(item => Object.keys(item).length === 3)
   },
+
+  emits: ['update:modelValue'],
 
   methods: {
     toggleMenu() {
@@ -59,19 +69,15 @@ export default {
       this.dropdownState === true ? this.dropdownState = false : this.dropdownState = true;
     },
 
-    selectValue(item) {
-      this.dropdownClass = "";
-      this.dropdownState = false;
-      this.dropdownTitle = item.text;
-      this.dropdownTitleIcon = item.icon;
-    },
   },
 
   watch: {
-    dropdownList(newValue, oldValue) {
-      this.$emit('click', {
-        selectedType: newValue,
-      })
+    modelValue(newValue) {
+      let currentValue = this.options.find(item => item.value === newValue);
+      this.dropdownClass = "";
+      this.dropdownState = false;
+      this.dropdownTitle = currentValue.text;
+      this.dropdownTitleIcon = currentValue.icon;
     }
   },
 };
