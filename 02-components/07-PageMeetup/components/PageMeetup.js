@@ -1,81 +1,65 @@
 import { defineComponent } from '../vendor/vue.esm-browser.js';
-import MeetupView from './MeetupView.js';
 import UiContainer from './UiContainer.js';
 import UiAlert from './UiAlert.js';
+import MeetupView from './MeetupView.js';
 import { fetchMeetupById } from '../meetupService.js';
 
-const States = {
-  IDLE: 'IDLE',
-  LOADING: 'LOADING',
-  SUCCESS: 'SUCCESS',
-  ERROR: 'ERROR',
-};
-
 export default defineComponent({
-  name: 'PageMeetup',
+    name: 'PageMeetup',
 
-  States,
-
-  components: {
-    MeetupView,
-    UiAlert,
-    UiContainer,
-  },
-
-  props: {
-    meetupId: {
-      type: Number,
-      required: true,
+    components: {
+        UiAlert,
+        UiContainer,
+        MeetupView,
     },
-  },
 
-  data() {
-    return {
-      state: States.IDLE,
-      meetup: null,
-      error: null,
-    };
-  },
-
-  watch: {
-    meetupId() {
-      this.fetchMeetup();
+    props: {
+        meetupId: {
+            type: Number,
+            required: true,
+        },
     },
-  },
 
-  mounted() {
-    this.fetchMeetup();
-  },
-
-  methods: {
-    async fetchMeetup() {
-      // Переходим в состояние загрузки. Чистим данные и ошибку
-      this.state = States.LOADING;
-      this.meetup = null;
-      this.error = null;
-
-      try {
-        this.meetup = await fetchMeetupById(this.meetupId);
-        // Данные успешно получены
-        this.state = States.SUCCESS;
-      } catch (error) {
-        // Произошла ошибка при получении данных
-        this.state = States.ERROR;
-        this.error = error.message;
-      }
+    data() {
+        return {
+            meetup: null,
+            refreshMeetup: null,
+            error: null,
+        }
     },
-  },
 
-  template: `
+    mounted() {
+        this.fetchMeetup();
+    },
+
+    watch: {
+        meetupId() {
+            this.fetchMeetup();
+        },
+    },
+
+    methods: {
+        async fetchMeetup() {
+            this.meetup = null;
+            this.refreshMeetup = null;
+            try {
+                this.meetup = await fetchMeetupById(this.meetupId);
+            } catch (error) {
+                this.refreshMeetup = 1;
+                this.error = error.message;
+            }
+        },
+    },
+
+    template: `
     <div class="page-meetup">
-      <MeetupView v-if="state === $options.States.SUCCESS" :meetup="meetup" />
-
-      <UiContainer v-if="state === $options.States.LOADING">
-        <UiAlert>Загрузка...</UiAlert>
-      </UiContainer>
-
-      <UiContainer v-if="state === $options.States.ERROR">
+        <!-- meetup view -->
+        <MeetupView v-if="meetup" :meetup="meetup" />
+        <UiContainer v-if="!meetup && !refreshMeetup">
+          <UiAlert>Загрузка...</UiAlert>
+        </UiContainer>
+        <UiContainer v-if="!meetup && refreshMeetup">
         <UiAlert>{{ error }}</UiAlert>
-      </UiContainer>
+        </UiContainer>
     </div>`,
 });

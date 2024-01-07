@@ -3,19 +3,19 @@ import MeetupView from './components/MeetupView.js';
 import meetups from './api/meetups.js';
 
 export default defineComponent({
-  name: 'App',
+    name: 'App',
 
-  components: {
-    MeetupView,
-  },
+    components: {
+        MeetupView,
+    },
 
-  data() {
-    return {
-      meetup: meetups[2],
-    };
-  },
+    data() {
+        return {
+            meetup: meetups[2],
+        };
+    },
 
-  template: `
+    template: `
     <div class="page-meetup">
       <MeetupView :meetup="meetup" />
     </div>

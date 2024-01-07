@@ -17,14 +17,14 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* _transitions.css */
 
 .fade-list {
   position: relative;
 }
 
-.fade-list > * {
+.fade-list > :deep(*) {
   opacity: 1;
   transition: opacity 0.3s ease-out;
 }

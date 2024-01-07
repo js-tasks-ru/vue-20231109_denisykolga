@@ -1,28 +1,23 @@
 <template>
-  <div class="dropdown" :class="{ dropdown_opened: isOpen }">
-    <button type="button" class="dropdown__toggle" :class="{ dropdown__toggle_icon: hasIcons }" @click="toggleOpen">
+  <div class="dropdown" :class="{ dropdown_opened: dropdownState }">
+    <button type="button" class="dropdown__toggle" :class="{ dropdown__toggle_icon: hasIcons }" @click="toggleMenu">
       <UiIcon v-if="selected?.icon" :icon="selected.icon" class="dropdown__icon" />
-      <span>{{ selected?.text ?? title }}</span>
+      <span>{{ selected?.text || title }}</span>
     </button>
 
-    <div v-show="isOpen" class="dropdown__menu" role="listbox">
+    <div class="dropdown__menu" role="listbox" v-show="dropdownState">
       <button
-        v-for="option in options"
-        :key="option.value"
-        class="dropdown__item"
-        :class="{ dropdown__item_icon: hasIcons }"
-        role="option"
-        type="button"
-        @click="select(option.value)"
-      >
+      v-for="option in options"
+      :key="option.value"
+      class="dropdown__item"
+      :class="{ dropdown__item_icon: hasIcons }"
+      role="option"
+      type="button"
+      @click="select(option.value)">
         <UiIcon v-if="option.icon" :icon="option.icon" class="dropdown__icon" />
         {{ option.text }}
       </button>
     </div>
-
-    <select v-model="selectModel" style="display: none">
-      <option v-for="option in options" :key="option.value" :value="option.value">{{ option.text }}</option>
-    </select>
   </div>
 </template>
 
@@ -34,19 +29,19 @@ export default {
 
   components: { UiIcon },
 
-  props: {
-    modelValue: {},
-
-    options: {
+  props:{
+    options:{
       type: Array,
       required: true,
       validator: (options) =>
-        options.every(
-          (option) => typeof option === 'object' && option !== null && 'value' in option && 'text' in option,
-        ),
+          options.every(
+            (option) => typeof option === 'object' && option !== null && 'value' in option && 'text' in option,
+          ),
     },
 
-    title: {
+    modelValue: {},
+
+    title:{
       type: String,
       required: true,
     },
@@ -54,46 +49,36 @@ export default {
 
   emits: ['update:modelValue'],
 
-  data() {
-    return {
-      isOpen: false,
-    };
+  data(){
+    return{
+      dropdownState: false,
+    }
   },
 
-  computed: {
-    selected() {
-      return this.options.find((option) => option.value === this.modelValue);
-    },
-
+  computed:{
     hasIcons() {
       return this.options.some((option) => option.icon);
     },
 
-    selectModel: {
-      get() {
-        return this.modelValue;
-      },
-
-      set(value) {
-        this.select(value);
-      },
-    },
+    selected() {
+      return this.options.find((option) => option.value === this.modelValue);
+    }
   },
 
   methods: {
-    toggleOpen() {
-      this.isOpen = !this.isOpen;
+    toggleMenu() {
+      this.dropdownState = !this.dropdownState;
     },
 
     select(value) {
-      this.isOpen = false;
-      this.$emit('update:modelValue', value);
-    },
+        this.dropdownState = false;
+        this.$emit('update:modelValue', value);
+      },
   },
 };
 </script>
 
-<style scoped>
+<style>
 .dropdown {
   position: relative;
   display: inline-block;
