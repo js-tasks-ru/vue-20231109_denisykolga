@@ -1,24 +1,25 @@
 <template>
   <div class="toasts">
-    <div v-for="toastItem in toasterList" class="toast" :class="toastItem.class">
-      <UiToast :toast-item="toastItem" />
+    <div v-for="toastItem in toasterList" :key="toastItem.id" class="toast" :class="toastItem.class">
+      <UiIcon class="toast__icon" :icon="toastItem.icon" />
+      <span>{{ toastItem.message }}</span>
     </div>
   </div>
 </template>
 
 <script>
-import UiToast from './UiToast.vue';
+import UiIcon from './UiIcon.vue';
 
 export default {
   name: 'TheToaster',
+  toastItem: null,
 
-  components: { UiToast },
+  components: { UiIcon },
 
   data(){
     return{
       toasterClass:null,
       toasterList:[],
-      toastItem:null,
     }
   },
 

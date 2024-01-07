@@ -14,7 +14,7 @@
           </div>
         </UiFormGroup>
         <div class="form__buttons">
-          <button type="submit" @submit="handleSubmit" class="button button_primary button_block">Войти</button>
+          <button type="submit" @click="handleSubmit" class="button button_primary button_block">Войти</button>
         </div>
         <div class="form__append">Нет аккаунта? <RouterLink :to="{name: 'register'}" class="nav__link">Зарегистрируйтесь</RouterLink></div>
       </form>

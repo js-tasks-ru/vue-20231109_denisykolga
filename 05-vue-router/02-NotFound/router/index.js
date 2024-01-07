@@ -19,16 +19,6 @@ export const router = createRouter({
                 import ('../views/PageNotFound'),
         },
         {
-            path: '/this-page-does-not-exists',
-            component: () =>
-                import ('../views/PageNotFound'),
-        },
-        {
-            path: '/page-unknown',
-            component: () =>
-                import ('../views/PageNotFound'),
-        },
-        {
             path: '/:catchAll(.*)',
             component: () =>
                 import ('../views/PageNotFound'),

@@ -1,20 +1,21 @@
 <template>
-  <div class="dropdown" :class="dropdownClass">
-    <button type="button" class="dropdown__toggle" :class="{ 'dropdown__toggle_icon': flag.length }" @click="toggleMenu()">
-      <UiIcon :icon="dropdownTitleIcon" class="dropdown__icon" />
-      <span>{{ dropdownTitle || title }}</span>
+  <div class="dropdown" :class="{ dropdown_opened: dropdownState }">
+    <button type="button" class="dropdown__toggle" :class="{ dropdown__toggle_icon: hasIcons }" @click="toggleMenu">
+      <UiIcon v-if="selected?.icon" :icon="selected.icon" class="dropdown__icon" />
+      <span>{{ selected?.text || title }}</span>
     </button>
 
     <div class="dropdown__menu" role="listbox" v-show="dropdownState">
       <button
-      v-for=" dropItem in options"
-      :key="dropItem.id"
+      v-for="option in options"
+      :key="option.value"
       class="dropdown__item"
-      :class="{ 'dropdown__item_icon': flag.length }"
+      :class="{ dropdown__item_icon: hasIcons }"
       role="option"
       type="button"
-      @click="$emit('update:modelValue', dropItem.value)">
-        <UiOption :drop-item="dropItem" />
+      @click="select(option.value)">
+        <UiIcon v-if="option.icon" :icon="option.icon" class="dropdown__icon" />
+        {{ option.text }}
       </button>
     </div>
   </div>
@@ -22,33 +23,23 @@
 
 <script>
 import UiIcon from './UiIcon.vue';
-import UiOption from './UiOption.vue';
 
 export default {
   name: 'UiDropdown',
 
-  components: { UiIcon, UiOption },
-
-  data(){
-    return{
-      dropdownClass:null,
-      dropdownState:false,
-      dropdownTitle: null,
-      dropdownTitleIcon: null,
-      flag: '',
-    }
-  },
+  components: { UiIcon },
 
   props:{
     options:{
       type: Array,
       required: true,
+      validator: (options) =>
+          options.every(
+            (option) => typeof option === 'object' && option !== null && 'value' in option && 'text' in option,
+          ),
     },
 
-    modelValue:{
-      type: String,
-      required: true,
-    },
+    modelValue: {},
 
     title:{
       type: String,
@@ -56,29 +47,33 @@ export default {
     },
   },
 
-  mounted(){
-    this.dropdownTitle = this.title;
-    this.flag = this.options.filter(item => Object.keys(item).length === 3)
+  emits: ['update:modelValue'],
+
+  data(){
+    return{
+      dropdownState: false,
+    }
   },
 
-  emits: ['update:modelValue'],
+  computed:{
+    hasIcons() {
+      return this.options.some((option) => option.icon);
+    },
+
+    selected() {
+      return this.options.find((option) => option.value === this.modelValue);
+    }
+  },
 
   methods: {
     toggleMenu() {
-      this.dropdownClass === "dropdown_opened" ? this.dropdownClass = '' : this.dropdownClass = "dropdown_opened";
-      this.dropdownState === true ? this.dropdownState = false : this.dropdownState = true;
+      this.dropdownState = !this.dropdownState;
     },
 
-  },
-
-  watch: {
-    modelValue(newValue) {
-      let currentValue = this.options.find(item => item.value === newValue);
-      this.dropdownClass = "";
-      this.dropdownState = false;
-      this.dropdownTitle = currentValue.text;
-      this.dropdownTitleIcon = currentValue.icon;
-    }
+    select(value) {
+        this.dropdownState = false;
+        this.$emit('update:modelValue', value);
+      },
   },
 };
 </script>

@@ -31,7 +31,7 @@
           </label>
         </UiFormGroup>
         <div class="form__buttons">
-          <button type="submit" class="button button_primary" @submit="handleSubmit">Зарегистрироваться</button>
+          <button type="submit" class="button button_primary" @click="handleSubmit">Зарегистрироваться</button>
         </div>
         <div class="form__append">Уже есть аккаунт? <RouterLink :to="{name: 'login'}" class="nav__link">Войдите</RouterLink></div>
       </form>
