@@ -1,28 +1,7 @@
 <template>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 33303aca4e69f2d35f78bf194d0692499615ec0b
-  <div class="dropdown" :class="{ dropdown_opened: dropdownState }">
-    <button type="button" class="dropdown__toggle" :class="{ dropdown__toggle_icon: hasIcons }" @click="toggleMenu">
-      <UiIcon v-if="selected?.icon" :icon="selected.icon" class="dropdown__icon" />
-      <span>{{ selected?.text || title }}</span>
-    </button>
-
-    <div class="dropdown__menu" role="listbox" v-show="dropdownState">
-      <button
-      v-for="option in options"
-      :key="option.value"
-      class="dropdown__item"
-      :class="{ dropdown__item_icon: hasIcons }"
-      role="option"
-      type="button"
-      @click="select(option.value)">
-<<<<<<< HEAD
-=======
   <div class="dropdown" :class="{ dropdown_opened: isOpen }">
     <button type="button" class="dropdown__toggle" :class="{ dropdown__toggle_icon: hasIcons }" @click="toggleOpen">
-      <UiIcon v-if="selected?.icon" :icon="selected.icon" class="dropdown__icon" />
+      <ui-icon v-if="selected?.icon" :icon="selected.icon" class="dropdown__icon" />
       <span>{{ selected?.text ?? title }}</span>
     </button>
 
@@ -36,144 +15,73 @@
         type="button"
         @click="select(option.value)"
       >
->>>>>>> 96a74c5606d5ae6429cc93a45dbeacb81ab83fa0
-=======
->>>>>>> 33303aca4e69f2d35f78bf194d0692499615ec0b
-        <UiIcon v-if="option.icon" :icon="option.icon" class="dropdown__icon" />
+        <ui-icon v-if="option.icon" :icon="option.icon" class="dropdown__icon" />
         {{ option.text }}
       </button>
     </div>
+
+    <select v-model="selectModel" style="display: none">
+      <option v-for="option in options" :key="option.value" :value="option.value">{{ option.text }}</option>
+    </select>
   </div>
 </template>
 
 <script>
-import UiIcon from './UiIcon.vue';
+  import UiIcon from './UiIcon.vue';
 
-export default {
-  name: 'UiDropdown',
+  export default {
+    name: 'UiDropdown',
 
-  components: { UiIcon },
+    components: { UiIcon },
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 33303aca4e69f2d35f78bf194d0692499615ec0b
-  props:{
-    options:{
-      type: Array,
-      required: true,
-      validator: (options) =>
+    props: {
+      modelValue: {},
+
+      options: {
+        type: Array,
+        required: true,
+        validator: (options) =>
           options.every(
             (option) => typeof option === 'object' && option !== null && 'value' in option && 'text' in option,
           ),
+      },
+
+      title: {
+        type: String,
+        required: true,
+      },
     },
 
-    modelValue: {},
+    emits: ['update:modelValue'],
 
-    title:{
-<<<<<<< HEAD
-=======
-  props: {
-    modelValue: {},
-
-    options: {
-      type: Array,
-      required: true,
-      validator: (options) =>
-        options.every(
-          (option) => typeof option === 'object' && option !== null && 'value' in option && 'text' in option,
-        ),
+    data() {
+      return {
+        isOpen: false,
+      };
     },
 
-    title: {
->>>>>>> 96a74c5606d5ae6429cc93a45dbeacb81ab83fa0
-=======
->>>>>>> 33303aca4e69f2d35f78bf194d0692499615ec0b
-      type: String,
-      required: true,
-    },
-  },
+    computed: {
+      selected() {
+        return this.options.find((option) => option.value === this.modelValue);
+      },
 
-  emits: ['update:modelValue'],
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 33303aca4e69f2d35f78bf194d0692499615ec0b
-  data(){
-    return{
-      dropdownState: false,
-    }
-  },
-
-  computed:{
-<<<<<<< HEAD
-=======
-  data() {
-    return {
-      isOpen: false,
-    };
-  },
-
-  computed: {
-    selected() {
-      return this.options.find((option) => option.value === this.modelValue);
+      hasIcons() {
+        return this.options.some((option) => option.icon);
+      },
     },
 
->>>>>>> 96a74c5606d5ae6429cc93a45dbeacb81ab83fa0
-=======
->>>>>>> 33303aca4e69f2d35f78bf194d0692499615ec0b
-    hasIcons() {
-      return this.options.some((option) => option.icon);
-    },
+    methods: {
+      toggleOpen() {
+        this.isOpen = !this.isOpen;
+      },
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 33303aca4e69f2d35f78bf194d0692499615ec0b
-    selected() {
-      return this.options.find((option) => option.value === this.modelValue);
-    }
-  },
-
-  methods: {
-    toggleMenu() {
-      this.dropdownState = !this.dropdownState;
-    },
-
-    select(value) {
-        this.dropdownState = false;
+      select(value) {
+        this.isOpen = false;
         this.$emit('update:modelValue', value);
       },
-<<<<<<< HEAD
-=======
-    selectModel: {
-      get() {
-        return this.modelValue;
-      },
-
-      set(value) {
-        this.select(value);
-      },
     },
-  },
-
-  methods: {
-    toggleOpen() {
-      this.isOpen = !this.isOpen;
-    },
-
-    select(value) {
-      this.isOpen = false;
-      this.$emit('update:modelValue', value);
-    },
->>>>>>> 96a74c5606d5ae6429cc93a45dbeacb81ab83fa0
-=======
->>>>>>> 33303aca4e69f2d35f78bf194d0692499615ec0b
-  },
-};
+  };
 </script>
-
 <style>
 .dropdown {
   position: relative;
