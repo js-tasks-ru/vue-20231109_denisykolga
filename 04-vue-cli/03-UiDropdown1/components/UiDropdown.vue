@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div class="dropdown" :class="{ dropdown_opened: dropdownState }">
     <button type="button" class="dropdown__toggle" :class="{ dropdown__toggle_icon: hasIcons }" @click="toggleMenu">
       <UiIcon v-if="selected?.icon" :icon="selected.icon" class="dropdown__icon" />
@@ -14,10 +15,32 @@
       role="option"
       type="button"
       @click="select(option.value)">
+=======
+  <div class="dropdown" :class="{ dropdown_opened: isOpen }">
+    <button type="button" class="dropdown__toggle" :class="{ dropdown__toggle_icon: hasIcons }" @click="toggleOpen">
+      <UiIcon v-if="selected?.icon" :icon="selected.icon" class="dropdown__icon" />
+      <span>{{ selected?.text ?? title }}</span>
+    </button>
+
+    <div v-show="isOpen" class="dropdown__menu" role="listbox">
+      <button
+        v-for="option in options"
+        :key="option.value"
+        class="dropdown__item"
+        :class="{ dropdown__item_icon: hasIcons }"
+        role="option"
+        type="button"
+        @click="select(option.value)"
+      >
+>>>>>>> 96a74c5606d5ae6429cc93a45dbeacb81ab83fa0
         <UiIcon v-if="option.icon" :icon="option.icon" class="dropdown__icon" />
         {{ option.text }}
       </button>
     </div>
+
+    <select v-model="selectModel" style="display: none">
+      <option v-for="option in options" :key="option.value" :value="option.value">{{ option.text }}</option>
+    </select>
   </div>
 </template>
 
@@ -29,6 +52,7 @@ export default {
 
   components: { UiIcon },
 
+<<<<<<< HEAD
   props:{
     options:{
       type: Array,
@@ -42,6 +66,21 @@ export default {
     modelValue: {},
 
     title:{
+=======
+  props: {
+    modelValue: {},
+
+    options: {
+      type: Array,
+      required: true,
+      validator: (options) =>
+        options.every(
+          (option) => typeof option === 'object' && option !== null && 'value' in option && 'text' in option,
+        ),
+    },
+
+    title: {
+>>>>>>> 96a74c5606d5ae6429cc93a45dbeacb81ab83fa0
       type: String,
       required: true,
     },
@@ -49,6 +88,7 @@ export default {
 
   emits: ['update:modelValue'],
 
+<<<<<<< HEAD
   data(){
     return{
       dropdownState: false,
@@ -56,10 +96,24 @@ export default {
   },
 
   computed:{
+=======
+  data() {
+    return {
+      isOpen: false,
+    };
+  },
+
+  computed: {
+    selected() {
+      return this.options.find((option) => option.value === this.modelValue);
+    },
+
+>>>>>>> 96a74c5606d5ae6429cc93a45dbeacb81ab83fa0
     hasIcons() {
       return this.options.some((option) => option.icon);
     },
 
+<<<<<<< HEAD
     selected() {
       return this.options.find((option) => option.value === this.modelValue);
     }
@@ -74,6 +128,28 @@ export default {
         this.dropdownState = false;
         this.$emit('update:modelValue', value);
       },
+=======
+    selectModel: {
+      get() {
+        return this.modelValue;
+      },
+
+      set(value) {
+        this.select(value);
+      },
+    },
+  },
+
+  methods: {
+    toggleOpen() {
+      this.isOpen = !this.isOpen;
+    },
+
+    select(value) {
+      this.isOpen = false;
+      this.$emit('update:modelValue', value);
+    },
+>>>>>>> 96a74c5606d5ae6429cc93a45dbeacb81ab83fa0
   },
 };
 </script>
