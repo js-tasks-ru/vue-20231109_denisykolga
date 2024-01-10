@@ -1,31 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 export const router = createRouter({
-<<<<<<< HEAD
     history: createWebHistory('/05-vue-router/03-ScrollBehavior'),
-=======
-  history: createWebHistory('/05-vue-router/03-ScrollBehavior/'),
-
-  scrollBehavior(to, from, savedPosition) {
-    // Если есть hash, прокручиваем к элементу по нему
-    if (to.hash) {
-      return { el: to.hash };
-    }
-
-    // Если есть savedPosition, возвращаем его же (переход назад/вперёд)
-    if (savedPosition) {
-      return savedPosition;
-    }
-
-    // Если оба маршрута в мета свойствах имеют saveScrollPosition - не меняем положение
-    if (to.meta.saveScrollPosition && from.meta.saveScrollPosition) {
-      return false;
-    }
-
-    // По умолчанию возвращаемся в начало
-    return { left: 0, top: 0 };
-  },
->>>>>>> 96a74c5606d5ae6429cc93a45dbeacb81ab83fa0
 
     routes: [{
             path: '/',
@@ -69,15 +45,22 @@ export const router = createRouter({
     ],
 
     scrollBehavior(to, from, savedPosition) {
+        // Если есть hash, прокручиваем к элементу по нему
         if (to.hash) {
-            return {
-                el: to.hash,
-            }
+            return { el: to.hash };
         }
 
+        // Если есть savedPosition, возвращаем его же (переход назад/вперёд)
+        if (savedPosition) {
+            return savedPosition;
+        }
+
+        // Если оба маршрута в мета свойствах имеют saveScrollPosition - не меняем положение
         if (to.meta.saveScrollPosition && from.meta.saveScrollPosition) {
             return false;
         }
-        return savedPosition || { top: 0, left: 0 }
-    }
+
+        // По умолчанию возвращаемся в начало
+        return { left: 0, top: 0 };
+    },
 });
