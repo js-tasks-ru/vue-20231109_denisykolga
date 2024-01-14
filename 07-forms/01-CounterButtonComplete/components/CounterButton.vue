@@ -1,37 +1,28 @@
 <template>
-  <button @click="increment">{{ localCount }}</button>
+  <button type="button" @click="increment">{{ localCount }}</button>
 </template>
 
 <script>
-import { dequal } from 'dequal';
+  export default {
+    name: 'CounterButton',
 
-export default {
-  name: 'CounterButton',
+    props: {
+      count: {
+        type: Number,
+        default: 0,
+      },
+    },
 
-  props:{
-    count: {
-            type: Number,
-            default: 0,
-        },
-  },
+    emits: ['update:count'],
 
-  data() {
-    return {
-      localCount: undefined,
-    };
-  },
+    data() {
+      return {
+        localCount: undefined,
+      };
+    },
 
-emits:['update:count'],
-
-methods:{
-  increment(){
-    return this.localCount += 1;
-  }
-},
-
-watch:{
-
-  count: {
+    watch: {
+      count: {
         immediate: true,
         handler() {
           this.localCount = this.count;
@@ -41,6 +32,12 @@ watch:{
       localCount() {
         this.$emit('update:count', this.localCount);
       },
-}
-};
+    },
+
+    methods: {
+      increment() {
+        this.localCount += 1;
+      },
+    },
+  };
 </script>
