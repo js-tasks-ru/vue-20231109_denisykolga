@@ -7,25 +7,25 @@ import UiAlert from './UiAlert.js';
 import UiContainer from './UiContainer.js';
 
 export default defineComponent({
-  name: 'MeetupView',
+    name: 'MeetupView',
 
-  components: {
-    MeetupCover,
-    MeetupDescription,
-    MeetupAgenda,
-    MeetupInfo,
-    UiAlert,
-    UiContainer,
-  },
-
-  props: {
-    meetup: {
-      type: Object,
-      required: true,
+    components: {
+        MeetupCover,
+        MeetupDescription,
+        MeetupAgenda,
+        MeetupInfo,
+        UiAlert,
+        UiContainer,
     },
-  },
 
-  template: `
+    props: {
+        meetup: {
+            type: Object,
+            required: true,
+        },
+    },
+
+    template: `
     <div>
       <MeetupCover :title="meetup.title" :image="meetup.image" />
 
@@ -36,7 +36,7 @@ export default defineComponent({
             <MeetupDescription :description="meetup.description" />
 
             <h3>Программа</h3>
-            <MeetupAgenda v-if="meetup.agenda?.length" :agenda="meetup.agenda" />
+            <MeetupAgenda :agenda="meetup.agenda" v-if="meetup.agenda?.length" />
             <UiAlert v-else>Программа пока пуста...</UiAlert>
           </div>
           <div class="meetup__aside">

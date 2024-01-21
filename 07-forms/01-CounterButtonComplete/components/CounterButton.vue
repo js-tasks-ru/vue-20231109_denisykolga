@@ -3,41 +3,41 @@
 </template>
 
 <script>
-export default {
-  name: 'CounterButton',
+  export default {
+    name: 'CounterButton',
 
-  props: {
-    count: {
-      type: Number,
-      default: 0,
-    },
-  },
-
-  emits: ['update:count'],
-
-  data() {
-    return {
-      localCount: undefined,
-    };
-  },
-
-  watch: {
-    count: {
-      immediate: true,
-      handler() {
-        this.localCount = this.count;
+    props: {
+      count: {
+        type: Number,
+        default: 0,
       },
     },
 
-    localCount() {
-      this.$emit('update:count', this.localCount);
-    },
-  },
+    emits: ['update:count'],
 
-  methods: {
-    increment() {
-      this.localCount += 1;
+    data() {
+      return {
+        localCount: undefined,
+      };
     },
-  },
-};
+
+    watch: {
+      count: {
+        immediate: true,
+        handler() {
+          this.localCount = this.count;
+        },
+      },
+
+      localCount() {
+        this.$emit('update:count', this.localCount);
+      },
+    },
+
+    methods: {
+      increment() {
+        this.localCount += 1;
+      },
+    },
+  };
 </script>

@@ -26,6 +26,7 @@ export default {
     this.sensorsDataController.addDataCallback(this.callback);
 
     // Раз в секунду запрашиваем и выводим новые данные сенсоров
+
     setInterval(() => {
       this.sensorsDataController.getData();
     }, 1000);
@@ -46,8 +47,8 @@ export default {
       for (const sensorId in sensors) {
         this.sensors[sensorId] = { ...sensors[sensorId] };
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
